@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+enum Gender {
+  male
+  female
+}
+enum OrderStatus{
+  pending
+  confirmed
+  cooking
+  delivered
+  canceled
+}
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  userName String @unique 
+  fullname String?
+  password String 
+  address String?
+  phone String? 
+  birthDay String?
+  gender Gender @default(male)
+  createdAt DateTime  @default(now())   
+  favorites Favorite[]
+  orders Order[]
+}
+model Promo {
+  id       Int     @id @default(autoincrement())
+  img String
+  
+}
+model Service {
+  id       Int     @id @default(autoincrement())
+  img String
+}
+
+model Product {
+  id       Int     @id @default(autoincrement())
+  name    String  @unique
+  menuName String 
+  menu Menu @relation(fields: [menuName], references: [name] ,onDelete: Cascade)
+  desc String?
+  price Int @default(0)
+  img String?
+  priority Int @default(1) 
+  supplements Supplement[]
+  
+ 
+}
+model Menu {
+  id       Int     @id @default(autoincrement())
+  name    String  @unique
+  resName String 
+  restaurant Restaurant @relation(fields: [resName], references: [name],onDelete: Cascade)
+  img String?
+  priority Int @default(1) 
+  products Product[]
+  
+}
+model Restaurant{
+ id       Int     @id @default(autoincrement())
+  name    String  @unique
+  catName String 
+  category Category @relation(fields: [catName], references: [name],onDelete: Cascade)
+  desc String?
+  img String?
+  priority Int @default(1) 
+  menus Menu[]
+  rate Int @default(1)
+  orders Order[]
+  location Json? 
+  favorites Favorite[]
+}
+model Category{
+  id       Int     @id @default(autoincrement())
+  name    String  @unique
+  img String?
+  priority Int @default(1) 
+  restaurants Restaurant[]
+ 
+}
+
+model Order{
+  id       Int     @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
+  items Json
+  comment String?
+  resId Int 
+  restaurant Restaurant @relation(fields: [resId], references: [id],onDelete: Cascade)
+  price Float
+  fee Float
+  totalPrice Float 
+  path Json?
+   createdAt DateTime  @default(now()) 
+   status OrderStatus @default(pending)
+}
+model Notification{
+  id Int @id @default(autoincrement())
+  title String
+  desc String
+  img String?
+}
+model Comment {
+  id       Int     @id @default(autoincrement())
+  rate Int @default(4)
+  comment String?
+  }
+model Favorite{
+  id       Int     @id @default(autoincrement())
+  resId Int @unique
+  userId Int
+  restaurant Restaurant @relation(fields: [resId], references: [id],onDelete: Cascade)
+  user  User @relation(fields: [userId], references: [id],onDelete: Cascade)
+}
+model Supplement{
+  id       Int     @id @default(autoincrement())
+  prodId Int 
+  price Float @default(0)
+  name String
+  product Product @relation(fields: [prodId], references: [id],onDelete: Cascade)
+ 
+}
+
+
+
+
+
