@@ -55,7 +55,7 @@ To get started with the backend, follow these steps:
 
 ## Installation
 
-To install the dependencies for the project, run the following command:
+To install the dependencies for the project, run the following command
 
 npm install
 
