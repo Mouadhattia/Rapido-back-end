@@ -69,7 +69,7 @@ after runing your mysql database im using xampp for that
 
 ## Contributing
 
-To contribute to the project, please follow these guidelines:
+To contribute to the project, please follow these guidelines
 
 1. Fork the repository
 2. Create a new branch
